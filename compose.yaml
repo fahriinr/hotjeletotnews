@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=hotjeletotnewsdb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - hotjeletotnews-network
+    ports:
+      - "5432:5432"
+
+networks:
+  hotjeletotnews-network:
+    driver: bridge
+volumes:
+  postgres-data:
