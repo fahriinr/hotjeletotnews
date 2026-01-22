@@ -1,7 +1,10 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import postgres from "postgres";
 import { z } from "zod";
+
+import { sessionTable, userTable } from "./db/schemas/auth";
 
 const EnvSchema = z.object({
   DATABASE_URL: z.url(),
@@ -10,7 +13,15 @@ const EnvSchema = z.object({
 const processEnv = EnvSchema.parse(process.env);
 
 const queryClient = postgres(processEnv.DATABASE_URL);
-const db = drizzle(queryClient);
-const result = await db.execute("select 1");
+export const db = drizzle(queryClient, {
+  schema: {
+    user: userTable,
+    session: sessionTable,
+  },
+});
 
-console.log(result);
+export const adapter = new DrizzlePostgreSQLAdapter(
+  db,
+  sessionTable,
+  userTable,
+);
