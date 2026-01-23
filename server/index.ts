@@ -18,7 +18,15 @@ app.use("*", async (c, next) => {
   console.log(`${c.req.method} ${c.req.path} - ${duration}ms`);
 });
 
+// Skip session validation for auth endpoints (login/signup) to improve performance
 app.use("*", cors(), async (c, next) => {
+  // Skip session validation for login/signup endpoints
+  if (c.req.path === "/api/auth/login" || c.req.path === "/api/auth/signup") {
+    c.set("user", null);
+    c.set("session", null);
+    return next();
+  }
+
   const sessionId = getCookie(c, lucia.sessionCookieName) ?? null;
   if (!sessionId) {
     c.set("user", null);

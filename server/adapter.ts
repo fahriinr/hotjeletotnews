@@ -12,7 +12,10 @@ const EnvSchema = z.object({
 
 const processEnv = EnvSchema.parse(process.env);
 
-const queryClient = postgres(processEnv.DATABASE_URL);
+// Optimize connection pooling for better performance
+const queryClient = postgres(processEnv.DATABASE_URL, {
+  prepare: true, // Enable prepared statements for better performance
+});
 export const db = drizzle(queryClient, {
   schema: {
     user: userTable,
