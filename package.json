@@ -9,6 +9,7 @@
     "@hono/zod-validator": "^0.7.6",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
     "drizzle-orm": "^0.45.1",
+    "drizzle-zod": "^0.8.3",
     "hono": "^4.11.4",
     "lucia": "^3.2.2",
     "postgres": "^3.4.8",

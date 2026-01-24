@@ -4,7 +4,15 @@ import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import postgres from "postgres";
 import { z } from "zod";
 
-import { sessionTable, userTable } from "./db/schemas/auth";
+import { sessionTable, userRelations, userTable } from "./db/schemas/auth";
+import { commentRelations, commentsTable } from "./db/schemas/comments";
+import { postRelations, postsTable } from "./db/schemas/posts";
+import {
+  commentsUpvotesTable,
+  commentUpvotesRelations,
+  postUpvotesRelations,
+  postUpvotesTable,
+} from "./db/schemas/upvotes";
 
 const EnvSchema = z.object({
   DATABASE_URL: z.url(),
@@ -20,6 +28,15 @@ export const db = drizzle(queryClient, {
   schema: {
     user: userTable,
     session: sessionTable,
+    posts: postsTable,
+    comments: commentsTable,
+    postUpvotes: postUpvotesTable,
+    commentUpvotes: commentsUpvotesTable,
+    postRelations,
+    commentUpvotesRelations,
+    postUpvotesRelations,
+    userRelations,
+    commentRelations,
   },
 });
 

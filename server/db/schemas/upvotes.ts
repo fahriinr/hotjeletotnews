@@ -16,18 +16,21 @@ export const postUpvotesTable = pgTable("post_upvotes", {
     .notNull(),
 });
 
-const postUpvotesRelations = relations(postUpvotesTable, ({ one, many }) => ({
-  post: one(postsTable, {
-    fields: [postUpvotesTable.postId],
-    references: [postsTable.id],
-    relationName: "postUpvotes",
+export const postUpvotesRelations = relations(
+  postUpvotesTable,
+  ({ one, many }) => ({
+    post: one(postsTable, {
+      fields: [postUpvotesTable.postId],
+      references: [postsTable.id],
+      relationName: "postUpvotes",
+    }),
+    user: one(userTable, {
+      fields: [postUpvotesTable.userId],
+      references: [userTable.id],
+      relationName: "user",
+    }),
   }),
-  user: one(userTable, {
-    fields: [postUpvotesTable.userId],
-    references: [userTable.id],
-    relationName: "user",
-  }),
-}));
+);
 
 export const commentsUpvotesTable = pgTable("comment_upvotes", {
   id: serial("id").primaryKey(),
@@ -40,10 +43,10 @@ export const commentsUpvotesTable = pgTable("comment_upvotes", {
     .notNull(),
 });
 
-const commentUpvotesRelations = relations(
+export const commentUpvotesRelations = relations(
   commentsUpvotesTable,
   ({ one, many }) => ({
-    post: one(commentsTable, {
+    comment: one(commentsTable, {
       fields: [commentsUpvotesTable.commentId],
       references: [commentsTable.id],
       relationName: "commentUpvotes",

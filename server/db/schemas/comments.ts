@@ -1,6 +1,9 @@
 import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
+import { createInsertSchema } from "drizzle-zod";
+import z from "zod";
+
 import { userTable } from "./auth";
 import { postsTable } from "./posts";
 import { commentsUpvotesTable } from "./upvotes";
@@ -21,7 +24,7 @@ export const commentsTable = pgTable("comments", {
   points: integer("points").default(0).notNull(),
 });
 
-export const commentRealtions = relations(commentsTable, ({ one, many }) => ({
+export const commentRelations = relations(commentsTable, ({ one, many }) => ({
   author: one(userTable, {
     fields: [commentsTable.userId],
     references: [userTable.id],
@@ -29,7 +32,7 @@ export const commentRealtions = relations(commentsTable, ({ one, many }) => ({
   }),
   parentComment: one(commentsTable, {
     fields: [commentsTable.parentCommentId],
-    references: [commentsTable.userId],
+    references: [commentsTable.id],
     relationName: "childComments",
   }),
   childComments: many(commentsTable, {
@@ -39,7 +42,11 @@ export const commentRealtions = relations(commentsTable, ({ one, many }) => ({
     fields: [commentsTable.postId],
     references: [postsTable.id],
   }),
-  commentUpVotes: many(commentsUpvotesTable, {
+  commentUpvotes: many(commentsUpvotesTable, {
     relationName: "commentUpvotes",
   }),
 }));
+
+export const insertCommentSchema = createInsertSchema(commentsTable, {
+  content: z.string().min(1, { error: "Comment must be at least 1 char" }),
+});
