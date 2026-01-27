@@ -12,6 +12,19 @@ services:
       - hotjeletotnews-network
     ports:
       - "5432:5432"
+  
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      # Gunakan nama service 'db' sebagai host
+      DATABASE_URL: "postgres://user:password@db:5432/hotjeletotnewsdb"
+      NODE_ENV: "production"
+    networks:
+      - hotjeletotnews-network
 
 networks:
   hotjeletotnews-network:
