@@ -8,6 +8,7 @@ import { userTable } from "@/db/schemas/auth";
 import { lucia } from "@/lucia";
 import { loggedIn } from "@/middleware/loggedIn";
 import { zValidator } from "@hono/zod-validator";
+import bcrypt from "bcryptjs";
 import { generateId } from "lucia";
 import postgres from "postgres";
 
@@ -16,7 +17,7 @@ import { loginSchema, type SuccessResponse } from "@/shared/types";
 export const authRouter = new Hono<Context>()
   .post("/signup", zValidator("form", loginSchema), async (c) => {
     const { username, password } = c.req.valid("form");
-    const passwordHash = await Bun.password.hash(password);
+    const passwordHash = await bcrypt.hash(password, 10);
     const userId = generateId(15);
 
     try {
@@ -60,7 +61,7 @@ export const authRouter = new Hono<Context>()
       });
     }
 
-    const validPassword = await Bun.password.verify(
+    const validPassword = await bcrypt.compare(
       password,
       existingUser.password_hash,
     );

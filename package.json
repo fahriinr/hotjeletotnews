@@ -1,11 +1,14 @@
 {
   "name": "hotjeletotnews",
   "scripts": {
-    "dev": "bun run --hot server/index.ts",
+    "dev": "bun run --hot server/server.ts",
     "format:write": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "build": "bun build ./server/server.ts --outfile=dist/index.js --target=node",
+    "start": "node dist/index.js"
   },
   "dependencies": {
+    "@hono/node-server": "^1.19.9",
     "@hono/zod-validator": "^0.7.6",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
     "drizzle-orm": "^0.45.1",
@@ -19,7 +22,9 @@
     "@eslint/compat": "^2.0.1",
     "@eslint/js": "^9.39.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
+    "@types/bcryptjs": "^3.0.0",
     "@types/bun": "latest",
+    "bcryptjs": "^3.0.3",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",

@@ -91,13 +91,5 @@ app.onError((err, c) => {
   );
 });
 
-const server = Bun.serve({
-  port: 3000,
-  hostname: "0.0.0.0",
-  fetch: app.fetch,
-});
-
-console.log("Bun sudah berjalan di", server.port);
-
 export default app;
 export type ApiRoutes = typeof routes;
